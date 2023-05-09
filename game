@@ -1,0 +1,83 @@
+def rules():
+    print(" Введите координаты: x y ")
+    print(" x - номер строки  ")
+    print(" y - номер столбца ")
+
+def playTable():
+    print()
+    print("    | 0 | 1 | 2 | ")
+    print(" ................. ")
+    for i, row in enumerate(table):
+        row_str = f"  {i} | {' | '.join(row)} | "
+        print(row_str)
+        print("  ................ ")
+    print()
+
+def request():
+    while True:
+        coords = input(" Введите координаты от 0 до 2:").split()
+
+        if len(coords) != 2:
+            print(" Введите  координаты x и у! ")
+            continue
+
+        x, y = coords
+
+        if not (x.isdigit()) or not (y.isdigit()):
+            print(" Введите координаты x и y! ")
+            continue
+
+        x, y = int(x), int(y)
+
+        if 0 > x or x > 2 or 0 > y or y > 2:
+            print(" Не верно! Попробуйте снова ! ")
+            continue
+
+        if table[x][y] != " ":
+                print(" Клетка занята! ")
+                continue
+
+        return x, y
+
+def winner():
+    win_coord = (((0, 0), (0, 1), (0, 2)), ((1, 0), (1, 1), (1, 2)), ((2, 0), (2, 1), (2, 2)),
+                ((0, 2), (1, 1), (2, 0)), ((0, 0), (1, 1), (2, 2)), ((0, 0), (1, 0), (2, 0)),
+                ((0, 1), (1, 1), (2, 1)), ((0, 2), (1, 2), (2, 2)))
+    for coord in win_coord:
+        symbols = []
+        for s in coord:
+            symbols.append(table[s[0]][s[1]])
+        if symbols == ["X", "X", "X"]:
+            print("X is Winner!")
+            return True
+        if symbols == ["0", "0", "0"]:
+            print("0 is Winner!")
+            return True
+    return False
+
+rules()
+
+table = [[" ", " ", " "] for i in range(3)]
+count = 0
+
+while True:
+    count += 1
+    playTable()
+    if count % 2 == 1:
+        print(" Ходит крестик!")
+    else:
+        print(" Ходит нолик!")
+
+    x, y = request()
+
+    if count % 2 == 1:
+        table[x][y] = "X"
+    else:
+        table[x][y] = "0"
+
+    if winner():
+        break
+
+    if count == 9:
+        print(" Ничья!")
+        break
